@@ -1,66 +1,93 @@
 # Assignment Questions
 
-## Load Raw Data
+### 1. Load Raw Data
 
-1. Load the CSV file "Public_Art_Data.csv" into your database into a staging table.
-2. After loading the data, run a simple query to ensure everything is loaded correctly.
+- Load the CSV file "Public_Art_Data.csv" into your database into a staging table.
+- Run a simple query to ensure everything is loaded correctly.
 
-## Figure out the keys
+### 2. Figure out the keys
 
-3. Write GROUP BY statements to check the keys in the staging table. Determine if "sac_id" or "Title" can be considered as keys.
-4. Identify any issues with the keys, such as NULL values, duplicate titles or sac_ids, and multiple sac_ids sharing a common title.
+- Write GROUP BY statements to check keys. Is sac_id a key? Title?
+- Identify issues such as NULL values, duplicate titles, duplicate sac_ids, and common titles shared by multiple sac_ids.
 
-## Fix empty descriptions
+### 3. Fix empty descriptions
 
-5. Write an UPDATE statement to replace all empty string values in the "description" column with NULL.
+- Write an UPDATE statement to replace all empty string values in the "description" column with NULL.
 
-## Create clean public art table
+### 4. Create clean public art table
 
-6. Create a new table called "clean_seattle_public_art" with specific columns:
-   - sac_id varchar(200)
-   - project varchar(200)
-   - title varchar(200)
-   - description text
-   - media varchar(200)
-   - date varchar(200)
-   - location varchar(200)
-7. Make (sac_id, title) the primary key of the "clean_seattle_public_art" table.
+- Create a new table called "clean_seattle_public_art" with specified columns and make (sac_id, title) the primary key.
 
-## Load clean art data
+sac_id varchar(200)
 
-8. Insert data into the "clean_seattle_public_art" table by selecting distinct values from the staging table and excluding cases where sac_id IS NULL.
+project varchar(200)
 
-## Create an artist table
+title varchar(200)
 
-9. Create a table "seattle_public_art_artist" with columns:
-   - first_name varchar(100)
-   - last_name varchar(100)
-   - suffix varchar(10)
-10. Make the primary key the combination of "first_name" and "last_name".
+description text
 
-## Populate artist table
+media varchar(200)
 
-11. Insert data into the "seattle_public_art_artist" table by selecting values from the staging table. Handle errors related to NULL values and duplicates.
+date varchar(200)
 
-## Fix dirty artist data
+location varchar(200)
 
-12. Identify and delete records with problematic artist names in the "seattle_public_art_artist" table. For example, artists with incorrect names or multiple names in the same field.
-13. Insert appropriate records for the cases where data was deleted.
+- Load clean art data into the "clean_seattle_public_art" table, excluding cases where sac_id IS NULL.
 
-## Create the many-to-many relationship
+### 5. Create an artist table
 
-14. Create a table "seattle_public_art_artist_work" with columns:
-    - sac_id varchar(200)
-    - title varchar(200)
-    - artist_first_name varchar(100)
-    - artist_last_name varchar(100)
-15. Make all four columns the primary key of the "seattle_public_art_artist_work" table.
+- Create a table "seattle_public_art_artist" with specified columns and make the primary key the combination of "artist_first_name" and "artist_last_name".
 
-## Populate artist work table
+first_name varchar(100)
 
-16. Use a join to find and insert clean artist and artwork data into the "seattle_public_art_artist_work" table.
-17. Handle duplicate records and errors during insertion.
+last_name varchar(100)
 
-## Query your clean schema
+suffix varchar(10)
 
-18. Write a query to find the number of works for each artist in the clean schema. Group by artist names and count the number of works associated with each artist.
+### 6. Populate your artist table with all the artist data
+
+- Use an INSERT statement to insert data into the "seattle_public_art_artist" table from the existing table "Public_Art_Data".
+
+### 7. Fix the dirty artist data
+
+- Write DELETE statements to remove bad artist data from the "seattle_public_art_artist" table.
+These sac ids appear to have some problems with the artist name:
+
+ESD00.074.06 (Jr. included in first name)
+
+PR99.044 (three people listed in last name column）
+
+PR99.043 (three people listed in last name column)
+
+PR99.046 (three people listed in last name column)
+
+PR99.045 (three people listed in last name column)
+
+NEA97.024 (two people listed in last name column)
+
+PR97.022 (two people listed in last name column)
+
+LIB05.006 (First name repeated in last name column)
+
+- Insert appropriate records for the problematic cases.
+
+### 8. Create the many-to-many relationship between art and artist
+
+- Create a table "seattle_public_art_artist_work" with specified columns and make the primary key all four columns.
+
+sac_id varchar(200)
+
+title varchar(200)
+
+artist_first_name varchar(100)
+
+artist_last_name varchar(100)
+
+### 9. Populate your new artist table
+
+- Find clean artists using a join and insert their data into the "seattle_public_art_artist_work" table.
+- Use DISTINCT to handle duplicate records and insert data for problematic cases.
+
+### 10. Now query your clean schema!
+
+- Find the number of works for each artist using a query that considers the many-to-many relationship between art and artist.
