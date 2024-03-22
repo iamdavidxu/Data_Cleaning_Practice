@@ -4,6 +4,7 @@
 
 - Load the CSV file "Public_Art_Data.csv" into your database into a staging table.
 - Run a simple query to ensure everything is loaded correctly.
+- CSV file can be found in Public_Art_Data.csv in the repo
 
 ### 2. Figure out the keys
 
